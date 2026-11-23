@@ -6,26 +6,29 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "plugins.generic.docxViewer.displayName"
-msgstr "DOCX Viewer"
+msgid "plugins.generic.documentPreview.displayName"
+msgstr "Document Preview"
 
-msgid "plugins.generic.docxViewer.description"
-msgstr "Adds a preview of submitted DOCX documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser with mammoth.js."
+msgid "plugins.generic.documentPreview.description"
+msgstr "Adds a preview of submitted documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser. Formats: DOCX (with mammoth.js)."
 
-msgid "plugins.generic.docxViewer.preview"
+msgid "plugins.generic.documentPreview.preview"
 msgstr "Preview"
 
-msgid "plugins.generic.docxViewer.previewOf"
+msgid "plugins.generic.documentPreview.previewOf"
 msgstr "Preview of {$name}"
 
-msgid "plugins.generic.docxViewer.loading"
+msgid "plugins.generic.documentPreview.loading"
 msgstr "Loading preview…"
 
-msgid "plugins.generic.docxViewer.error"
+msgid "plugins.generic.documentPreview.error"
 msgstr "The preview could not be created. Please download the file instead."
 
-msgid "plugins.generic.docxViewer.notDocx"
-msgstr "This file is not a DOCX document and cannot be previewed. Please download it instead."
+msgid "plugins.generic.documentPreview.unsupported"
+msgstr "This file cannot be shown in the preview. Please download it instead."
 
-msgid "plugins.generic.docxViewer.notice"
+msgid "plugins.generic.documentPreview.file"
+msgstr "file"
+
+msgid "plugins.generic.documentPreview.notice"
 msgstr "Simplified preview: layout, page breaks, headers, footers and comments are not shown."

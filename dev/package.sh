@@ -4,12 +4,12 @@
 #   dev/package.sh [--ref <git ref>] [--out <dir>] [--tag <tag>]
 #
 # The package is `git archive` of the ref (default HEAD), without the files marked
-# export-ignore in .gitattributes, in a single folder docxViewer/.
+# export-ignore in .gitattributes, in a single folder documentPreview/.
 # The version comes from version.xml; --tag (e.g. v1.0.1) must match it.
 #
 # Output in <dir> (default dist/):
-#   docxViewer-v<version>.tar.gz              the package
-#   docxViewer-v<version>.tar.gz.md5          its md5 sum
+#   documentPreview-v<version>.tar.gz              the package
+#   documentPreview-v<version>.tar.gz.md5          its md5 sum
 #   gallery-release.xml                       <release> element to add to plugins.xml
 #   gallery-plugin.xml                        complete <plugin> entry (first submission)
 #
@@ -17,8 +17,8 @@
 #   GITHUB_REPOSITORY (owner/repo).
 set -euo pipefail
 
-PRODUCT=docxViewer
-REPO="${GITHUB_REPOSITORY:-cboulanger/ojs-docx-viewer}"
+PRODUCT=documentPreview
+REPO="${GITHUB_REPOSITORY:-cboulanger/ojs-document-preview}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REF=HEAD
 OUT="$ROOT/dist"
@@ -60,7 +60,7 @@ LIST="$(tar tzf "$OUT/$FILE")"
 if grep -qv "^$PRODUCT/" <<<"$LIST"; then
 	echo "Package has files outside $PRODUCT/" >&2; exit 1
 fi
-for required in version.xml DocxViewerPlugin.php LICENSE locale/en/locale.po locale/de/locale.po js/docxViewer.js js/lib/mammoth.browser.min.js js/lib/mammoth.LICENSE css/docxViewer.css; do
+for required in version.xml DocumentPreviewPlugin.php LICENSE locale/en/locale.po locale/de/locale.po js/documentPreview.js js/renderers/docx.js js/lib/mammoth.browser.min.js js/lib/mammoth.LICENSE css/documentPreview.css; do
 	grep -qx "$PRODUCT/$required" <<<"$LIST" || { echo "Package lacks $required" >&2; exit 1; }
 done
 for excluded in dev/ tests/ docs/ .github/; do
@@ -80,7 +80,7 @@ echo "$MD5  $FILE" > "$OUT/$FILE.md5"
 # Gallery XML (see https://github.com/pkp/plugin-gallery, plugins.xsd)
 PACKAGE_URL="https://github.com/$REPO/releases/download/$VERSION_TAG/$FILE" \
 RELEASE="$RELEASE" DATE="$DATE" MD5="$MD5" OUT="$OUT" ROOT="$ROOT" \
-RELEASE_DESCRIPTION="${RELEASE_DESCRIPTION:-DOCX Viewer $VERSION_TAG for OJS 3.5.}" \
+RELEASE_DESCRIPTION="${RELEASE_DESCRIPTION:-Document Preview $VERSION_TAG for OJS 3.5.}" \
 python3 - <<'EOF'
 import os
 from xml.sax.saxutils import escape

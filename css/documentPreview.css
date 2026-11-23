@@ -1,11 +1,11 @@
 /**
- * plugins/generic/docxViewer/css/docxViewer.css
+ * plugins/generic/documentPreview/css/documentPreview.css
  *
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  */
 
 /* "Preview" (eye icon) before the file name */
-.docxViewer__button {
+.documentPreview__button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -23,14 +23,14 @@
 	vertical-align: middle;
 }
 
-.docxViewer__button:hover,
-.docxViewer__button:focus-visible {
+.documentPreview__button:hover,
+.documentPreview__button:focus-visible {
 	background: #006798;
 	color: #fff;
 }
 
 /* The preview dialog */
-.docxViewer {
+.documentPreview {
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -48,15 +48,15 @@
 	font-size: 0.875rem;
 }
 
-.docxViewer:not([open]) {
+.documentPreview:not([open]) {
 	display: none;
 }
 
-.docxViewer::backdrop {
+.documentPreview::backdrop {
 	background: rgba(0, 0, 0, 0.6);
 }
 
-.docxViewer__header {
+.documentPreview__header {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -64,7 +64,7 @@
 	border-bottom: 1px solid #ddd;
 }
 
-.docxViewer__title {
+.documentPreview__title {
 	flex: 1;
 	min-width: 0;
 	margin: 0;
@@ -75,7 +75,7 @@
 	white-space: nowrap;
 }
 
-.docxViewer__action {
+.documentPreview__action {
 	padding: 0.25rem 0.75rem;
 	border: 1px solid #006798;
 	border-radius: 3px;
@@ -86,13 +86,13 @@
 	cursor: pointer;
 }
 
-.docxViewer__action:hover,
-.docxViewer__action:focus-visible {
+.documentPreview__action:hover,
+.documentPreview__action:focus-visible {
 	background: #006798;
 	color: #fff;
 }
 
-.docxViewer__notice {
+.documentPreview__notice {
 	margin: 0;
 	padding: 0.4rem 1rem;
 	background: #f5f5f5;
@@ -100,21 +100,21 @@
 	font-size: 0.8125rem;
 }
 
-.docxViewer__status {
+.documentPreview__status {
 	margin: 2rem 1rem;
 	text-align: center;
 }
 
-.docxViewer__status--error {
+.documentPreview__status--error {
 	color: #d00a6c;
 }
 
-.docxViewer__frame {
+.documentPreview__frame {
 	flex: 1;
 	width: 100%;
 	border: 0;
 }
 
-.docxViewer__frame[hidden] {
+.documentPreview__frame[hidden] {
 	display: none;
 }

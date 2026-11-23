@@ -31,11 +31,11 @@ jobs:
         run: |
           # Same keys in English and German, and every key used is defined
           diff <(grep '^msgid' locale/en/locale.po) <(grep '^msgid' locale/de/locale.po)
-          diff <(git grep -hoE 'plugins\.generic\.docxViewer\.[A-Za-z.]+' -- ':!locale' | sort -u) \
-               <(grep -oE 'plugins\.generic\.docxViewer\.[A-Za-z.]+' locale/en/locale.po | sort -u)
+          diff <(git grep -hoE 'plugins\.generic\.documentPreview\.[A-Za-z.]+' -- ':!locale' | sort -u) \
+               <(grep -oE 'plugins\.generic\.documentPreview\.[A-Za-z.]+' locale/en/locale.po | sort -u)
 
       - name: JavaScript syntax
-        run: node --check js/docxViewer.js
+        run: for f in js/documentPreview.js js/renderers/*.js; do node --check "$f"; done
 
       - name: Release package
         run: dev/package.sh --out dist

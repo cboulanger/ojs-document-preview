@@ -45,17 +45,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DESCRIPTION: ${{ steps.tag.outputs.description }}
         run: |
-          file=$(cd dist && ls docxViewer-*.tar.gz)
+          file=$(cd dist && ls documentPreview-*.tar.gz)
           md5=$(cut -d' ' -f1 "dist/$file.md5")
           cat > notes.md <<EOF
           ${DESCRIPTION}
 
-          Requires OJS 3.5 and PHP 8.2 or later. Unpack \`${file}\` into \`plugins/generic/\` or upload it under *Website Settings › Plugins › Upload a new plugin*, then enable *DOCX Viewer* in each journal.
+          Requires OJS 3.5 and PHP 8.2 or later. Unpack \`${file}\` into \`plugins/generic/\` or upload it under *Website Settings › Plugins › Upload a new plugin*, then enable *Document Preview* in each journal.
 
           md5 of the package: \`${md5}\`
 
           Plugin Gallery: \`gallery-release.xml\` is the \`<release>\` element to add to [plugins.xml](https://github.com/pkp/plugin-gallery) (\`gallery-plugin.xml\`: the whole entry, for the first submission).
           EOF
           gh release create "$GITHUB_REF_NAME" --draft --verify-tag \
-            --title "DOCX Viewer ${GITHUB_REF_NAME#v}" --notes-file notes.md \
+            --title "Document Preview ${GITHUB_REF_NAME#v}" --notes-file notes.md \
             "dist/$file" "dist/$file.md5" dist/gallery-release.xml dist/gallery-plugin.xml
