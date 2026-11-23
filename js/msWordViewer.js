@@ -3,7 +3,7 @@
  *
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
- * Adds a "Preview" button after every link to OJS's file download handler whose
+ * Adds a "Preview" button before every link to OJS's file download handler whose
  * text is a file name ending in .docx: links with the URL in href (Vue components,
  * e.g. the workflow's file lists) and link actions of the older grids (e.g.
  * discussions, the reviewer's files), which have href="#" and the URL in the
@@ -58,32 +58,64 @@
 	}
 
 	/**
-	 * Add the button after a link to a .docx file, remove it if the link (reused by
+	 * The button goes before the file name, so that it stays visible when OJS
+	 * truncates a long name (the file lists cut off what doesn't fit in the cell).
+	 * If the link is wrapped in an element of its own, before that element.
+	 */
+	function anchorOf(a) {
+		var parent = a.parentElement;
+		if (parent && parent.children.length === 1 && !/^(TD|TH|LI|P|DIV)$/.test(parent.tagName)) {
+			return parent;
+		}
+		return a;
+	}
+
+	/**
+	 * Add the button for a link to a .docx file, remove it if the link (reused by
 	 * Vue) now points to another kind of file.
 	 */
 	function sync(a) {
-		var next = a.nextElementSibling;
-		var button = next && next.classList.contains(BUTTON_CLASS) ? next : null;
+		var button = a.msWordViewerButton && a.msWordViewerButton.isConnected ? a.msWordViewerButton : null;
 		var name = fileName(a);
 		if (!DOCX.test(name) || !downloadUrl(a)) {
 			if (button) {
 				button.remove();
 			}
+			a.msWordViewerButton = null;
 			return;
 		}
 		if (!button) {
 			button = document.createElement('button');
 			button.type = 'button';
 			button.className = BUTTON_CLASS;
-			button.textContent = text.preview;
+			// Icon only (FontAwesome, loaded by OJS), so that the file name keeps the room
+			var icon = document.createElement('span');
+			icon.className = 'fa fa-eye';
+			icon.setAttribute('aria-hidden', 'true');
+			button.appendChild(icon);
+			button.msWordViewerLink = a;
 			button.addEventListener('click', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
-				openPreview(button.previousElementSibling);
+				openPreview(a);
 			});
-			a.insertAdjacentElement('afterend', button);
+			anchorOf(a).insertAdjacentElement('beforebegin', button);
+			a.msWordViewerButton = button;
 		}
 		button.setAttribute('aria-label', text.previewOf.replace('%s', name));
+		button.title = text.preview;
+	}
+
+	/**
+	 * Remove buttons whose link is gone (re-rendered by Vue or the grid).
+	 */
+	function removeOrphans() {
+		Array.prototype.forEach.call(document.querySelectorAll('.' + BUTTON_CLASS), function (button) {
+			var link = button.msWordViewerLink;
+			if (!link || !link.isConnected || link.msWordViewerButton !== button) {
+				button.remove();
+			}
+		});
 	}
 
 	function scan(root) {
@@ -259,6 +291,9 @@
 	function start() {
 		scan(document.body);
 		new MutationObserver(function (mutations) {
+			if (mutations.some(function (m) { return m.removedNodes.length; })) {
+				removeOrphans();
+			}
 			mutations.forEach(function (m) {
 				if (m.type === 'characterData') {
 					// Vue changed a link's text only

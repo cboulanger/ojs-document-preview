@@ -4,16 +4,21 @@
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  */
 
-/* "Preview" next to the file name */
+/* "Preview" (eye icon) before the file name */
 .msWordViewer__button {
-	margin-inline-start: 0.5rem;
-	padding: 0 0.4rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-inline-end: 0.25rem;
+	padding: 0;
 	border: 1px solid #006798;
 	border-radius: 3px;
 	background: #fff;
 	color: #006798;
-	font-size: 0.8125rem;
-	line-height: 1.5;
+	font-size: 0.875rem;
+	line-height: 1;
 	cursor: pointer;
 	vertical-align: middle;
 }

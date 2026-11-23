@@ -6,7 +6,7 @@ The specification is in [issue #1](https://github.com/cboulanger/ojs-ms-word-vie
 
 ## What it does
 
-On the backend pages, a **Preview** button appears next to every file download link whose file name ends in `.docx`. This covers the workflow's file lists, discussion attachments, the reviewer's files and the file selection dialogs. It works with OJS's newer (Vue) file lists and with the older grids.
+On the backend pages, a **Preview** button (an eye icon, labelled for screen readers) appears before every file download link whose file name ends in `.docx`. It sits before the name so that it stays visible when OJS truncates long file names. This covers the workflow's file lists, discussion attachments, the reviewer's files and the file selection dialogs. It works with OJS's newer (Vue) file lists and with the older grids.
 
 The button opens a dialog with:
 
