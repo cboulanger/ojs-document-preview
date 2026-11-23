@@ -1,5 +1,5 @@
 /**
- * plugins/generic/msWordViewer/js/msWordViewer.js
+ * plugins/generic/docxViewer/js/docxViewer.js
  *
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
@@ -18,14 +18,14 @@
 (function () {
 	'use strict';
 
-	var config = window.msWordViewerConfig;
+	var config = window.docxViewerConfig;
 	if (!config || !window.fetch || !window.MutationObserver || !window.HTMLDialogElement) {
 		return;
 	}
 	var text = config.text;
 	var LINK_SELECTOR = 'a[href*="download-file"], a.pkp_linkaction_downloadFile';
 	var URL_OPTION = /"url":\s*("(?:[^"\\]|\\.)*")/;
-	var BUTTON_CLASS = 'msWordViewer__button';
+	var BUTTON_CLASS = 'docxViewer__button';
 	var DOCX = /\.docx$/i;
 	var mammothPromise = null;
 
@@ -75,13 +75,13 @@
 	 * Vue) now points to another kind of file.
 	 */
 	function sync(a) {
-		var button = a.msWordViewerButton && a.msWordViewerButton.isConnected ? a.msWordViewerButton : null;
+		var button = a.docxViewerButton && a.docxViewerButton.isConnected ? a.docxViewerButton : null;
 		var name = fileName(a);
 		if (!DOCX.test(name) || !downloadUrl(a)) {
 			if (button) {
 				button.remove();
 			}
-			a.msWordViewerButton = null;
+			a.docxViewerButton = null;
 			return;
 		}
 		if (!button) {
@@ -93,14 +93,14 @@
 			icon.className = 'fa fa-eye';
 			icon.setAttribute('aria-hidden', 'true');
 			button.appendChild(icon);
-			button.msWordViewerLink = a;
+			button.docxViewerLink = a;
 			button.addEventListener('click', function (e) {
 				e.preventDefault();
 				e.stopPropagation();
 				openPreview(a);
 			});
 			anchorOf(a).insertAdjacentElement('beforebegin', button);
-			a.msWordViewerButton = button;
+			a.docxViewerButton = button;
 		}
 		button.setAttribute('aria-label', text.previewOf.replace('%s', name));
 		button.title = text.preview;
@@ -111,8 +111,8 @@
 	 */
 	function removeOrphans() {
 		Array.prototype.forEach.call(document.querySelectorAll('.' + BUTTON_CLASS), function (button) {
-			var link = button.msWordViewerLink;
-			if (!link || !link.isConnected || link.msWordViewerButton !== button) {
+			var link = button.docxViewerLink;
+			if (!link || !link.isConnected || link.docxViewerButton !== button) {
 				button.remove();
 			}
 		});
@@ -220,31 +220,31 @@
 	function openPreview(link) {
 		var name = fileName(link);
 		var url = downloadUrl(link);
-		var dialog = element('dialog', 'msWordViewer');
+		var dialog = element('dialog', 'docxViewer');
 		dialog.setAttribute('aria-label', text.previewOf.replace('%s', name));
 
-		var header = element('div', 'msWordViewer__header');
-		var download = element('a', 'msWordViewer__action', text.download);
+		var header = element('div', 'docxViewer__header');
+		var download = element('a', 'docxViewer__action', text.download);
 		download.href = url;
-		var close = element('button', 'msWordViewer__action msWordViewer__close', text.close);
+		var close = element('button', 'docxViewer__action docxViewer__close', text.close);
 		close.type = 'button';
 		close.addEventListener('click', function () {
 			dialog.close();
 		});
-		header.appendChild(element('h2', 'msWordViewer__title', name));
+		header.appendChild(element('h2', 'docxViewer__title', name));
 		header.appendChild(download);
 		header.appendChild(close);
 
-		var status = element('p', 'msWordViewer__status', text.loading);
+		var status = element('p', 'docxViewer__status', text.loading);
 		status.setAttribute('role', 'status');
 
-		var frame = element('iframe', 'msWordViewer__frame');
+		var frame = element('iframe', 'docxViewer__frame');
 		frame.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox');
 		frame.title = text.previewOf.replace('%s', name);
 		frame.hidden = true;
 
 		dialog.appendChild(header);
-		dialog.appendChild(element('p', 'msWordViewer__notice', text.notice));
+		dialog.appendChild(element('p', 'docxViewer__notice', text.notice));
 		dialog.appendChild(status);
 		dialog.appendChild(frame);
 
@@ -281,9 +281,9 @@
 			status.hidden = true;
 		}).catch(function (error) {
 			status.textContent = error && error.notDocx ? text.notDocx : text.error;
-			status.classList.add('msWordViewer__status--error');
+			status.classList.add('docxViewer__status--error');
 			if (window.console) {
-				console.warn('MS Word Viewer:', error);
+				console.warn('DOCX Viewer:', error);
 			}
 		});
 	}

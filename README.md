@@ -1,8 +1,8 @@
-# MS Word Viewer for OJS 3.5
+# DOCX Viewer for OJS 3.5
 
-A lightweight OJS plugin that lets editors, reviewers and authors **read submitted Word files (.docx) in the browser** instead of downloading them. The conversion uses [mammoth.js](https://github.com/mwilliamson/mammoth.js).
+A lightweight OJS plugin that lets editors, reviewers and authors **read submitted DOCX documents in the browser** instead of downloading them. The conversion uses [mammoth.js](https://github.com/mwilliamson/mammoth.js).
 
-The specification is in [issue #1](https://github.com/cboulanger/ojs-ms-word-viewer/issues/1). The plugin follows the patterns of [Editor Assignments](https://github.com/cboulanger/ojs-editor-assignments) and [Dossier Manager](https://github.com/cboulanger/ojs-dossier-manager).
+The specification is in [issue #1](https://github.com/cboulanger/ojs-docx-viewer/issues/1). The plugin follows the patterns of [Editor Assignments](https://github.com/cboulanger/ojs-editor-assignments) and [Dossier Manager](https://github.com/cboulanger/ojs-dossier-manager).
 
 ## What it does
 
@@ -20,7 +20,7 @@ How it works:
 - The conversion happens in the browser. Nothing is converted, cached or stored on the server, and the plugin has no database tables or settings.
 - The result is shown in a sandboxed iframe: scripts in the document can't run, the document has no access to OJS, and it can't load anything from outside, so opening a file sends no data to third parties. Links in the document open in a new tab.
 - mammoth.js (about 400 KB, 100 KB compressed) is included in the plugin, not loaded from a CDN, and it is only loaded when someone opens their first preview.
-- Old Word files (`.doc`) and files that aren't really `.docx` get no button, or an error message saying to download the file instead.
+- Files in the older `.doc` format and files that aren't really `.docx` get no button, or an error message saying to download the file instead.
 - The preview doesn't show the document's metadata (such as the author stored in the file's properties), comments or tracked changes. That is useful for anonymous review, but it doesn't replace removing that information from the file.
 
 English and German.
@@ -31,23 +31,40 @@ Requirements: OJS 3.5, PHP 8.2 or later.
 
 ```sh
 cd /path/to/ojs/plugins/generic
-git clone https://github.com/cboulanger/ojs-ms-word-viewer.git msWordViewer   # the folder name matters
+git clone https://github.com/cboulanger/ojs-docx-viewer.git docxViewer   # the folder name matters
 cd /path/to/ojs
-php lib/pkp/tools/installPluginVersion.php plugins/generic/msWordViewer/version.xml
+php lib/pkp/tools/installPluginVersion.php plugins/generic/docxViewer/version.xml
 ```
 
-Then enable *MS Word Viewer* under *Website Settings › Plugins › Generic Plugins*.
+Then enable *DOCX Viewer* under *Website Settings › Plugins › Generic Plugins*.
 
 ## Files
 
 | Path | Contents |
 | --- | --- |
-| `MsWordViewerPlugin.php` | Adds the script, the styles and the texts to the backend pages |
-| `js/msWordViewer.js` | Finds the download links, adds the buttons, shows the preview |
-| `css/msWordViewer.css` | Button and dialog |
+| `DocxViewerPlugin.php` | Adds the script, the styles and the texts to the backend pages |
+| `js/docxViewer.js` | Finds the download links, adds the buttons, shows the preview |
+| `css/docxViewer.css` | Button and dialog |
 | `js/lib/mammoth.browser.min.js` | mammoth.js 1.13.0 ([BSD 2-Clause](js/lib/mammoth.LICENSE)) |
 
 To update mammoth.js: `npm pack mammoth@<version>`, copy `package/mammoth.browser.min.js` and `package/LICENSE` to `js/lib/` (the license as `mammoth.LICENSE`), and update the version above.
+
+## Releases
+
+The release package contains only what OJS needs (a rule of the PKP Plugin Gallery). What is left out is marked `export-ignore` in [`.gitattributes`](.gitattributes): `dev/` and the repository files.
+
+1. Set `<release>` (four numbers) and `<date>` in `version.xml` and commit.
+2. Optional: check the package locally with `dev/package.sh` (writes `dist/`). It fails if the package lacks a runtime file or contains development files.
+3. Push an annotated tag matching the version (`0.1.0.0` → `v0.1.0`, `0.1.0.2` → `v0.1.0-2`). Its first line becomes the release description in the gallery:
+
+   ```sh
+   git tag -a v0.1.0 -m "What changed, in one line" && git push origin v0.1.0
+   ```
+
+4. The [Release workflow](.github/workflows/release.yml) runs the checks ([CI](.github/workflows/ci.yml): PHP and JavaScript syntax, locale keys, package), builds the package and creates a **draft** release with `docxViewer-v0.1.0.tar.gz`, its `.md5`, `gallery-release.xml` and `gallery-plugin.xml`. Drafts are only visible to the repository's maintainers: download the package with `gh release download v0.1.0 -p '*.tar.gz'`, test it, then publish the draft on GitHub.
+5. Plugin Gallery: open a pull request on [pkp/plugin-gallery](https://github.com/pkp/plugin-gallery) that adds `gallery-release.xml` to the plugin's entry in `plugins.xml` (the first time: `gallery-plugin.xml`, the whole entry). Disclose AI-assisted work in the pull request. A package in the gallery must never change (its md5 is checked), so fixes need a new version.
+
+The gallery entry's texts are in [`dev/gallery/plugin.xml`](dev/gallery/plugin.xml) and [`dev/gallery/description.html`](dev/gallery/description.html).
 
 ## License
 

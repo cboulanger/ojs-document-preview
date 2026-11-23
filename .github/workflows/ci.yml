@@ -1,10 +1,11 @@
-# Checks that need no OJS: PHP syntax and locale keys.
+# Checks that need no OJS: PHP syntax, locale keys, JavaScript syntax and the release package.
 name: CI
 
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
@@ -30,8 +31,11 @@ jobs:
         run: |
           # Same keys in English and German, and every key used is defined
           diff <(grep '^msgid' locale/en/locale.po) <(grep '^msgid' locale/de/locale.po)
-          diff <(git grep -hoE 'plugins\.generic\.msWordViewer\.[A-Za-z.]+' -- ':!locale' | sort -u) \
-               <(grep -oE 'plugins\.generic\.msWordViewer\.[A-Za-z.]+' locale/en/locale.po | sort -u)
+          diff <(git grep -hoE 'plugins\.generic\.docxViewer\.[A-Za-z.]+' -- ':!locale' | sort -u) \
+               <(grep -oE 'plugins\.generic\.docxViewer\.[A-Za-z.]+' locale/en/locale.po | sort -u)
 
       - name: JavaScript syntax
-        run: node --check js/msWordViewer.js
+        run: node --check js/docxViewer.js
+
+      - name: Release package
+        run: dev/package.sh --out dist

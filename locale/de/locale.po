@@ -6,26 +6,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "plugins.generic.msWordViewer.displayName"
-msgstr "MS-Word-Vorschau"
+msgid "plugins.generic.docxViewer.displayName"
+msgstr "DOCX-Vorschau"
 
-msgid "plugins.generic.msWordViewer.description"
-msgstr "Ergänzt den redaktionellen Workflow um eine Vorschau eingereichter Word-Dateien (.docx), sodass sie ohne Herunterladen gelesen werden können. Die Umwandlung erfolgt im Browser mit mammoth.js."
+msgid "plugins.generic.docxViewer.description"
+msgstr "Ergänzt den redaktionellen Workflow um eine Vorschau eingereichter DOCX-Dokumente, sodass sie ohne Herunterladen gelesen werden können. Die Umwandlung erfolgt im Browser mit mammoth.js."
 
-msgid "plugins.generic.msWordViewer.preview"
+msgid "plugins.generic.docxViewer.preview"
 msgstr "Vorschau"
 
-msgid "plugins.generic.msWordViewer.previewOf"
+msgid "plugins.generic.docxViewer.previewOf"
 msgstr "Vorschau von {$name}"
 
-msgid "plugins.generic.msWordViewer.loading"
+msgid "plugins.generic.docxViewer.loading"
 msgstr "Vorschau wird geladen …"
 
-msgid "plugins.generic.msWordViewer.error"
+msgid "plugins.generic.docxViewer.error"
 msgstr "Die Vorschau konnte nicht erstellt werden. Bitte laden Sie die Datei herunter."
 
-msgid "plugins.generic.msWordViewer.notDocx"
-msgstr "Diese Datei ist kein Word-Dokument im Format .docx und kann nicht in der Vorschau angezeigt werden. Bitte laden Sie sie herunter."
+msgid "plugins.generic.docxViewer.notDocx"
+msgstr "Diese Datei ist kein DOCX-Dokument und kann nicht in der Vorschau angezeigt werden. Bitte laden Sie sie herunter."
 
-msgid "plugins.generic.msWordViewer.notice"
+msgid "plugins.generic.docxViewer.notice"
 msgstr "Vereinfachte Vorschau: Seitenlayout, Seitenumbrüche, Kopf- und Fußzeilen sowie Kommentare werden nicht angezeigt."

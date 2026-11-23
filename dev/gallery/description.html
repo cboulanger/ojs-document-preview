@@ -1,0 +1,8 @@
+<p>Adds a preview of submitted DOCX documents to the editorial workflow. A preview button appears before every file name ending in <code>.docx</code>: in the workflow's file lists, discussion attachments, the reviewer's files and the file selection dialogs. It opens the document as simple HTML (headings, paragraphs, emphasis, lists, tables, links, images, footnotes and endnotes) in a dialog, with a link to download the original file.</p>
+<ul>
+<li>The file is loaded through OJS's own download link, so OJS's access rules apply unchanged: the preview never shows more than the user could download.</li>
+<li>The conversion happens in the browser with <a href="https://github.com/mwilliamson/mammoth.js">mammoth.js</a> (BSD 2-Clause, included in the plugin). Nothing is converted or stored on the server; no database tables, no settings.</li>
+<li>The document is shown in a sandboxed frame: it can't run scripts, access OJS or load external resources.</li>
+<li>Simplified preview: page layout, headers, footers, comments, tracked changes and the file's metadata are not shown.</li>
+<li>English and German.</li>
+</ul>

@@ -1,11 +1,11 @@
 /**
- * plugins/generic/msWordViewer/css/msWordViewer.css
+ * plugins/generic/docxViewer/css/docxViewer.css
  *
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  */
 
 /* "Preview" (eye icon) before the file name */
-.msWordViewer__button {
+.docxViewer__button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -23,14 +23,14 @@
 	vertical-align: middle;
 }
 
-.msWordViewer__button:hover,
-.msWordViewer__button:focus-visible {
+.docxViewer__button:hover,
+.docxViewer__button:focus-visible {
 	background: #006798;
 	color: #fff;
 }
 
 /* The preview dialog */
-.msWordViewer {
+.docxViewer {
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -48,15 +48,15 @@
 	font-size: 0.875rem;
 }
 
-.msWordViewer:not([open]) {
+.docxViewer:not([open]) {
 	display: none;
 }
 
-.msWordViewer::backdrop {
+.docxViewer::backdrop {
 	background: rgba(0, 0, 0, 0.6);
 }
 
-.msWordViewer__header {
+.docxViewer__header {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -64,7 +64,7 @@
 	border-bottom: 1px solid #ddd;
 }
 
-.msWordViewer__title {
+.docxViewer__title {
 	flex: 1;
 	min-width: 0;
 	margin: 0;
@@ -75,7 +75,7 @@
 	white-space: nowrap;
 }
 
-.msWordViewer__action {
+.docxViewer__action {
 	padding: 0.25rem 0.75rem;
 	border: 1px solid #006798;
 	border-radius: 3px;
@@ -86,13 +86,13 @@
 	cursor: pointer;
 }
 
-.msWordViewer__action:hover,
-.msWordViewer__action:focus-visible {
+.docxViewer__action:hover,
+.docxViewer__action:focus-visible {
 	background: #006798;
 	color: #fff;
 }
 
-.msWordViewer__notice {
+.docxViewer__notice {
 	margin: 0;
 	padding: 0.4rem 1rem;
 	background: #f5f5f5;
@@ -100,21 +100,21 @@
 	font-size: 0.8125rem;
 }
 
-.msWordViewer__status {
+.docxViewer__status {
 	margin: 2rem 1rem;
 	text-align: center;
 }
 
-.msWordViewer__status--error {
+.docxViewer__status--error {
 	color: #d00a6c;
 }
 
-.msWordViewer__frame {
+.docxViewer__frame {
 	flex: 1;
 	width: 100%;
 	border: 0;
 }
 
-.msWordViewer__frame[hidden] {
+.docxViewer__frame[hidden] {
 	display: none;
 }

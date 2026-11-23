@@ -1,40 +1,40 @@
 <?php
 
 /**
- * @file plugins/generic/msWordViewer/MsWordViewerPlugin.php
+ * @file plugins/generic/docxViewer/DocxViewerPlugin.php
  *
  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
- * @class MsWordViewerPlugin
+ * @class DocxViewerPlugin
  *
- * @brief Adds a "Preview" button next to the download links of Word files (.docx)
+ * @brief Adds a "Preview" button next to the download links of DOCX documents
  *  on the backend pages. The file is loaded through OJS's own download link (so
  *  OJS's access rules apply) and converted to HTML in the browser with mammoth.js.
  *  Nothing is stored or converted on the server.
  */
 
-namespace APP\plugins\generic\msWordViewer;
+namespace APP\plugins\generic\docxViewer;
 
 use APP\core\Application;
 use APP\template\TemplateManager;
 use PKP\plugins\GenericPlugin;
 use PKP\plugins\Hook;
 
-class MsWordViewerPlugin extends GenericPlugin
+class DocxViewerPlugin extends GenericPlugin
 {
     public function getName()
     {
-        return 'MsWordViewerPlugin';
+        return 'DocxViewerPlugin';
     }
 
     public function getDisplayName()
     {
-        return __('plugins.generic.msWordViewer.displayName');
+        return __('plugins.generic.docxViewer.displayName');
     }
 
     public function getDescription()
     {
-        return __('plugins.generic.msWordViewer.description');
+        return __('plugins.generic.docxViewer.description');
     }
 
     public function register($category, $path, $mainContextId = null)
@@ -62,24 +62,24 @@ class MsWordViewerPlugin extends GenericPlugin
         $config = [
             'mammothUrl' => "{$base}/js/lib/mammoth.browser.min.js?v={$version}",
             'text' => [
-                'preview' => __('plugins.generic.msWordViewer.preview'),
-                'previewOf' => __('plugins.generic.msWordViewer.previewOf', ['name' => '%s']),
+                'preview' => __('plugins.generic.docxViewer.preview'),
+                'previewOf' => __('plugins.generic.docxViewer.previewOf', ['name' => '%s']),
                 'close' => __('common.close'),
                 'download' => __('common.download'),
-                'loading' => __('plugins.generic.msWordViewer.loading'),
-                'error' => __('plugins.generic.msWordViewer.error'),
-                'notDocx' => __('plugins.generic.msWordViewer.notDocx'),
-                'notice' => __('plugins.generic.msWordViewer.notice'),
+                'loading' => __('plugins.generic.docxViewer.loading'),
+                'error' => __('plugins.generic.docxViewer.error'),
+                'notDocx' => __('plugins.generic.docxViewer.notDocx'),
+                'notice' => __('plugins.generic.docxViewer.notice'),
             ],
         ];
         $options = ['contexts' => 'backend'];
         $templateMgr->addJavaScript(
-            'msWordViewerConfig',
-            'window.msWordViewerConfig = ' . json_encode($config, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) . ';',
+            'docxViewerConfig',
+            'window.docxViewerConfig = ' . json_encode($config, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) . ';',
             $options + ['inline' => true]
         );
-        $templateMgr->addJavaScript('msWordViewer', "{$base}/js/msWordViewer.js?v={$version}", $options);
-        $templateMgr->addStyleSheet('msWordViewer', "{$base}/css/msWordViewer.css?v={$version}", $options);
+        $templateMgr->addJavaScript('docxViewer', "{$base}/js/docxViewer.js?v={$version}", $options);
+        $templateMgr->addStyleSheet('docxViewer', "{$base}/css/docxViewer.css?v={$version}", $options);
         return false;
     }
 }

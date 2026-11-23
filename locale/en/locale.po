@@ -6,26 +6,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "plugins.generic.msWordViewer.displayName"
-msgstr "MS Word Viewer"
+msgid "plugins.generic.docxViewer.displayName"
+msgstr "DOCX Viewer"
 
-msgid "plugins.generic.msWordViewer.description"
-msgstr "Adds a preview of submitted Word files (.docx) to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser with mammoth.js."
+msgid "plugins.generic.docxViewer.description"
+msgstr "Adds a preview of submitted DOCX documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser with mammoth.js."
 
-msgid "plugins.generic.msWordViewer.preview"
+msgid "plugins.generic.docxViewer.preview"
 msgstr "Preview"
 
-msgid "plugins.generic.msWordViewer.previewOf"
+msgid "plugins.generic.docxViewer.previewOf"
 msgstr "Preview of {$name}"
 
-msgid "plugins.generic.msWordViewer.loading"
+msgid "plugins.generic.docxViewer.loading"
 msgstr "Loading preview…"
 
-msgid "plugins.generic.msWordViewer.error"
+msgid "plugins.generic.docxViewer.error"
 msgstr "The preview could not be created. Please download the file instead."
 
-msgid "plugins.generic.msWordViewer.notDocx"
-msgstr "This file is not a Word document in .docx format and cannot be previewed. Please download it instead."
+msgid "plugins.generic.docxViewer.notDocx"
+msgstr "This file is not a DOCX document and cannot be previewed. Please download it instead."
 
-msgid "plugins.generic.msWordViewer.notice"
+msgid "plugins.generic.docxViewer.notice"
 msgstr "Simplified preview: layout, page breaks, headers, footers and comments are not shown."

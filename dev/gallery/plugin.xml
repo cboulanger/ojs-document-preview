@@ -1,0 +1,15 @@
+	<plugin category="generic" product="docxViewer">
+		<name locale="en">DOCX Viewer</name>
+		<name locale="en_US">DOCX Viewer</name>
+		<homepage>https://github.com/cboulanger/ojs-docx-viewer</homepage>
+		<summary locale="en">Lets editors, reviewers and authors read submitted DOCX documents in the browser instead of downloading them. The conversion happens in the browser with mammoth.js.</summary>
+		<summary locale="en_US">Lets editors, reviewers and authors read submitted DOCX documents in the browser instead of downloading them. The conversion happens in the browser with mammoth.js.</summary>
+		<description locale="en"><![CDATA[@DESCRIPTION@]]></description>
+		<description locale="en_US"><![CDATA[@DESCRIPTION@]]></description>
+		<maintainer>
+			<name>Christian Boulanger</name>
+			<institution>Max Planck Institute for Legal History and Legal Theory</institution>
+			<email>info@bibliograph.org</email>
+		</maintainer>
+@RELEASES@
+	</plugin>
