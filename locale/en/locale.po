@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.msWordViewer.displayName"
+msgstr "MS Word Viewer"
+
+msgid "plugins.generic.msWordViewer.description"
+msgstr "Adds a preview of submitted Word files (.docx) to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser with mammoth.js."
+
+msgid "plugins.generic.msWordViewer.preview"
+msgstr "Preview"
+
+msgid "plugins.generic.msWordViewer.previewOf"
+msgstr "Preview of {$name}"
+
+msgid "plugins.generic.msWordViewer.loading"
+msgstr "Loading preview…"
+
+msgid "plugins.generic.msWordViewer.error"
+msgstr "The preview could not be created. Please download the file instead."
+
+msgid "plugins.generic.msWordViewer.notDocx"
+msgstr "This file is not a Word document in .docx format and cannot be previewed. Please download it instead."
+
+msgid "plugins.generic.msWordViewer.notice"
+msgstr "Simplified preview: layout, page breaks, headers, footers and comments are not shown."
