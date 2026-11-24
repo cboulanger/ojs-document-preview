@@ -322,7 +322,9 @@
 	}
 
 	function documentHtml(body) {
-		return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+		// The base keeps links within the document (#footnote-1) in it: without it, Firefox
+		// and Safari resolve them against the OJS page and load that page into the frame.
+		return '<!DOCTYPE html><html><head><meta charset="utf-8"><base href="about:srcdoc">' +
 			'<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src data:; style-src \'unsafe-inline\'">' +
 			'<style>' +
 			'body{font-family:Georgia,"Times New Roman",serif;font-size:17px;line-height:1.6;color:#222;background:#fff;max-width:46rem;margin:0 auto;padding:2rem 1.5rem 4rem;overflow-wrap:break-word}' +
