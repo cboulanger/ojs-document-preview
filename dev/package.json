@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "description": "Development tools for Document Preview (not part of the release package)",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "@xmldom/xmldom": "^0.9.8"
+  }
+}

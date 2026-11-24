@@ -2,8 +2,8 @@
 		<name locale="en">Document Preview</name>
 		<name locale="en_US">Document Preview</name>
 		<homepage>https://github.com/cboulanger/ojs-document-preview</homepage>
-		<summary locale="en">Lets editors, reviewers and authors read submitted documents in the browser instead of downloading them. Converted in the browser; supports DOCX, other formats can be added as renderers.</summary>
-		<summary locale="en_US">Lets editors, reviewers and authors read submitted documents in the browser instead of downloading them. Converted in the browser; supports DOCX, other formats can be added as renderers.</summary>
+		<summary locale="en">Lets editors, reviewers and authors read submitted documents in the browser instead of downloading them. Converted in the browser; supports DOCX and ODT, other formats can be added as renderers.</summary>
+		<summary locale="en_US">Lets editors, reviewers and authors read submitted documents in the browser instead of downloading them. Converted in the browser; supports DOCX and ODT, other formats can be added as renderers.</summary>
 		<description locale="en"><![CDATA[@DESCRIPTION@]]></description>
 		<description locale="en_US"><![CDATA[@DESCRIPTION@]]></description>
 		<maintainer>

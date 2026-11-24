@@ -2,3 +2,4 @@
 .claude/
 .local/
 /dist/
+node_modules/

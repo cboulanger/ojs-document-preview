@@ -72,6 +72,14 @@ class DocumentPreviewPlugin extends GenericPlugin
                     'mammothUrl' => "{$baseUrl}/js/lib/mammoth.browser.min.js?v={$version}",
                 ],
             ],
+            'odt' => [
+                'script' => "{$baseUrl}/js/renderers/odt.js?v={$version}",
+                'extensions' => ['odt', 'fodt'],
+                'mimeTypes' => [
+                    'application/vnd.oasis.opendocument.text',
+                    'application/vnd.oasis.opendocument.text-flat-xml',
+                ],
+            ],
         ];
         Hook::call('DocumentPreview::renderers', [&$renderers, $this]);
         return $renderers;

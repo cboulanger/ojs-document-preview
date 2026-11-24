@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+  Manual check of the ODT renderer in a browser, outside OJS. From the plugin folder:
+    python3 -m http.server 8000
+  then open http://localhost:8000/dev/test/odt.html and pick a sample (or a file of your own).
+-->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>ODT renderer test</title>
+	<style>
+		body { font-family: system-ui, sans-serif; margin: 1rem; }
+		iframe { width: 100%; height: 75vh; border: 1px solid #ccc; }
+		#status { color: #a00; }
+	</style>
+	<script>
+		// Stands in for the core (js/documentPreview.js)
+		window.documentPreview = {register: function (id, renderer) { window.renderer = renderer; }};
+	</script>
+	<script src="../../js/renderers/odt.js"></script>
+</head>
+<body>
+	<p>
+		<select id="sample">
+			<option value="">Sample…</option>
+			<option>sample.odt</option>
+			<option>sample.fodt</option>
+			<option>pandoc.odt</option>
+			<option>docx-renamed.odt</option>
+			<option>broken-xml.odt</option>
+		</select>
+		or <input type="file" id="file" accept=".odt,.fodt">
+		<span id="status"></span>
+	</p>
+	<iframe id="frame" sandbox title="Preview"></iframe>
+	<script>
+		function show(buffer) {
+			var status = document.getElementById('status');
+			status.textContent = '';
+			window.renderer.render(buffer).then(function (html) {
+				window.lastHtml = html;
+				document.getElementById('frame').srcdoc = '<!DOCTYPE html><meta charset="utf-8">' +
+					'<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src data:; style-src \'unsafe-inline\'">' +
+					'<style>table{border-collapse:collapse}td,th{border:1px solid #bbb;padding:.3em}</style>' + html;
+			}, function (error) {
+				window.lastHtml = null;
+				status.textContent = (error.unsupported ? 'Unsupported: ' : 'Error: ') + error.message;
+			});
+		}
+		// odt.html?all: renders all samples and lists the results (for headless checks)
+		if (/[?&]all\b/.test(location.search)) {
+			var names = Array.prototype.slice.call(document.querySelectorAll('#sample option[value=""] ~ option')).map(function (o) { return o.textContent; });
+			var results = document.createElement('pre');
+			document.body.appendChild(results);
+			names.reduce(function (done, name) {
+				return done.then(function () {
+					return fetch('samples/' + name).then(function (r) { return r.arrayBuffer(); }).then(function (b) {
+						return window.renderer.render(b);
+					}).then(function (html) {
+						results.textContent += name + ': OK ' + html.length + ' ' + html.replace(/base64,[^"]*/g, 'base64,…') + '\n';
+					}, function (error) {
+						results.textContent += name + ': ' + (error.unsupported ? 'UNSUPPORTED ' : 'ERROR ') + error.message + '\n';
+					});
+				});
+			}, Promise.resolve()).then(function () {
+				results.id = 'done';
+			});
+		}
+		document.getElementById('sample').addEventListener('change', function (e) {
+			if (e.target.value) {
+				fetch('samples/' + e.target.value).then(function (r) { return r.arrayBuffer(); }).then(show);
+			}
+		});
+		document.getElementById('file').addEventListener('change', function (e) {
+			if (e.target.files[0]) {
+				e.target.files[0].arrayBuffer().then(show);
+			}
+		});
+	</script>
+</body>
+</html>

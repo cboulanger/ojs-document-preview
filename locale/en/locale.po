@@ -10,7 +10,7 @@ msgid "plugins.generic.documentPreview.displayName"
 msgstr "Document Preview"
 
 msgid "plugins.generic.documentPreview.description"
-msgstr "Adds a preview of submitted documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser. Formats: DOCX (with mammoth.js)."
+msgstr "Adds a preview of submitted documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser. Formats: DOCX (with mammoth.js) and OpenDocument text (ODT)."
 
 msgid "plugins.generic.documentPreview.preview"
 msgstr "Preview"

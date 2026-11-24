@@ -10,7 +10,7 @@ msgid "plugins.generic.documentPreview.displayName"
 msgstr "Dokumentvorschau"
 
 msgid "plugins.generic.documentPreview.description"
-msgstr "Ergänzt den redaktionellen Workflow um eine Vorschau eingereichter Dokumente, sodass sie ohne Herunterladen gelesen werden können. Die Umwandlung erfolgt im Browser. Formate: DOCX (mit mammoth.js)."
+msgstr "Ergänzt den redaktionellen Workflow um eine Vorschau eingereichter Dokumente, sodass sie ohne Herunterladen gelesen werden können. Die Umwandlung erfolgt im Browser. Formate: DOCX (mit mammoth.js) und OpenDocument-Text (ODT)."
 
 msgid "plugins.generic.documentPreview.preview"
 msgstr "Vorschau"

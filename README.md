@@ -1,8 +1,8 @@
 # Document Preview for OJS 3.5
 
-A lightweight OJS plugin that lets editors, reviewers and authors **read submitted documents in the browser** instead of downloading them. Supported format: **DOCX**, converted with [mammoth.js](https://github.com/mwilliamson/mammoth.js). Further formats can be added as renderers (see [Renderers](#renderers)).
+A lightweight OJS plugin that lets editors, reviewers and authors **read submitted documents in the browser** instead of downloading them. Supported formats: **DOCX**, converted with [mammoth.js](https://github.com/mwilliamson/mammoth.js), and **ODT** (OpenDocument text, as written by LibreOffice; also the single-file `.fodt`), converted by the plugin's own code. Further formats can be added as renderers (see [Renderers](#renderers)).
 
-The specification is in [issue #1](https://github.com/cboulanger/ojs-document-preview/issues/1). The plugin follows the patterns of [Editor Assignments](https://github.com/cboulanger/ojs-editor-assignments) and [Dossier Manager](https://github.com/cboulanger/ojs-dossier-manager).
+The specification is in [issue #1](https://github.com/cboulanger/ojs-document-preview/issues/1), the ODT renderer's in [issue #2](https://github.com/cboulanger/ojs-document-preview/issues/2). The plugin follows the patterns of [Editor Assignments](https://github.com/cboulanger/ojs-editor-assignments) and [Dossier Manager](https://github.com/cboulanger/ojs-dossier-manager).
 
 ## What it does
 
@@ -10,7 +10,7 @@ On the backend pages, a **Preview** button (an eye icon, labelled for screen rea
 
 Which files get the button:
 
-- files whose name ends in an extension a renderer reads (`.docx`);
+- files whose name ends in an extension a renderer reads (`.docx`, `.odt`, `.fodt`);
 - files whose name has no extension (OJS allows any name, also an empty one, and files from older OJS versions often have one): the plugin asks OJS's download link for the file's media type with one `HEAD` request per file, at most three at a time, and uses that;
 - files with another extension (`.pdf`, `.doc`, …) get no button and cause no request.
 
@@ -25,8 +25,9 @@ How it works:
 - The file is loaded through the same OJS download link as the file name. OJS checks access exactly as it does for a download, so anyone who can see the button can only preview files they could download anyway.
 - The conversion happens in the browser. Nothing is converted, cached or stored on the server, and the plugin has no database tables or settings.
 - The result is shown in a sandboxed iframe: scripts in the document can't run, the document has no access to OJS, and it can't load anything from outside, so opening a file sends no data to third parties. Links in the document open in a new tab.
-- mammoth.js (about 400 KB, 100 KB compressed) is included in the plugin, not loaded from a CDN, and it is only loaded when someone opens their first preview.
-- A file that a renderer can't read (e.g. a file in the older `.doc` format renamed to `.docx`) gets a message saying to download it instead.
+- mammoth.js (about 400 KB, 100 KB compressed) is included in the plugin, not loaded from a CDN, and it is only loaded when someone opens their first DOCX preview.
+- ODT needs no library: the renderer (about 25 KB) reads the zip archive with the browser's built-in decompression and converts the XML itself. ODT documents get the same simple HTML as DOCX; tracked changes are shown as accepted.
+- A file that a renderer can't read (e.g. a file in the older `.doc` format renamed to `.docx`, or a password-protected ODT file) gets a message saying to download it instead.
 - The preview doesn't show the document's metadata (such as the author stored in the file's properties), comments or tracked changes. That is useful for anonymous review, but it doesn't replace removing that information from the file.
 
 English and German.
@@ -51,6 +52,7 @@ Then enable *Document Preview* under *Website Settings › Plugins › Generic P
 | `DocumentPreviewPlugin.php` | The renderer registry; adds the scripts, the styles and the texts to the backend pages |
 | `js/documentPreview.js` | Core: finds the download links, adds the buttons, shows the preview; registration API for renderers |
 | `js/renderers/docx.js` | DOCX renderer |
+| `js/renderers/odt.js` | ODT renderer (zip reader and converter, no library) |
 | `css/documentPreview.css` | Button and dialog |
 | `js/lib/mammoth.browser.min.js` | mammoth.js 1.13.0 ([BSD 2-Clause](js/lib/mammoth.LICENSE)) |
 
@@ -65,10 +67,10 @@ A renderer converts one or more formats to HTML in the browser. It has two parts
 ```php
 Hook::add('DocumentPreview::renderers', function (string $hookName, array $args) {
     $renderers = &$args[0];
-    $renderers['odt'] = [
-        'script' => $myPluginUrl . '/js/odt.js',      // registers the renderer in the browser
-        'extensions' => ['odt'],                      // file name extensions, without the dot
-        'mimeTypes' => ['application/vnd.oasis.opendocument.text'], // for names without extension
+    $renderers['rtf'] = [
+        'script' => $myPluginUrl . '/js/rtf.js',      // registers the renderer in the browser
+        'extensions' => ['rtf'],                      // file name extensions, without the dot
+        'mimeTypes' => ['application/rtf', 'text/rtf'], // for names without extension
         'options' => ['libraryUrl' => $myPluginUrl . '/js/lib/some-library.js'], // passed to render()
     ];
     return false;
@@ -78,12 +80,12 @@ Hook::add('DocumentPreview::renderers', function (string $hookName, array $args)
 **The script**, which registers the renderer under the same id:
 
 ```js
-documentPreview.register('odt', {
+documentPreview.register('rtf', {
     // buffer: the file as an ArrayBuffer; options: from the PHP registration.
     // Returns (a promise of) the document's body as HTML.
     render: function (buffer, options) {
         return documentPreview.loadScript(options.libraryUrl).then(function () {
-            if (!looksLikeOdt(buffer)) {
+            if (!looksLikeRtf(buffer)) {
                 throw documentPreview.unsupported();  // "can't be shown, please download"
             }
             return convert(buffer);
@@ -93,6 +95,10 @@ documentPreview.register('odt', {
 ```
 
 The core takes care of finding the files, the button, loading the file, the dialog and the sandboxed display. `loadScript()` loads a library once, on first use. The HTML may contain images as `data:` URLs; external resources are blocked.
+
+## Tests
+
+The ODT renderer has tests (Node 20 or later): `cd dev && npm install && npm test`. To check it in a browser, outside OJS: run `python3 -m http.server` in the plugin folder and open `http://localhost:8000/dev/test/odt.html` (with `?all` it renders all samples in `dev/test/samples/`). The samples were written with pandoc ([`sample.md`](dev/test/samples/sample.md)) and converted with LibreOffice.
 
 ## Releases
 
