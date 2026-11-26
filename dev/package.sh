@@ -60,7 +60,7 @@ LIST="$(tar tzf "$OUT/$FILE")"
 if grep -qv "^$PRODUCT/" <<<"$LIST"; then
 	echo "Package has files outside $PRODUCT/" >&2; exit 1
 fi
-for required in version.xml DocumentPreviewPlugin.php LICENSE locale/en/locale.po locale/de/locale.po js/documentPreview.js js/renderers/docx.js js/lib/mammoth.browser.min.js js/lib/mammoth.LICENSE css/documentPreview.css; do
+for required in version.xml DocumentPreviewPlugin.php LICENSE locale/en/locale.po locale/de/locale.po js/documentPreview.js js/renderers/docx.js js/renderers/odt.js js/renderers/image.js js/renderers/pdf.js js/lib/mammoth.browser.min.js js/lib/mammoth.LICENSE css/documentPreview.css; do
 	grep -qx "$PRODUCT/$required" <<<"$LIST" || { echo "Package lacks $required" >&2; exit 1; }
 done
 for excluded in dev/ tests/ docs/ .github/; do
