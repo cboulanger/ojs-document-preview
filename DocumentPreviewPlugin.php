@@ -16,17 +16,26 @@
  *  (js/documentPreview.js). This class tells the page which renderers exist and
  *  which formats they read; other plugins can add renderers with the hook
  *  "DocumentPreview::renderers".
+ *
+ *  PDF files are shown with the PDF.js viewer of OJS's "PDF.js PDF Viewer" plugin
+ *  (plugins/generic/pdfJsViewer, part of OJS). The PDF preview needs that plugin
+ *  installed; it doesn't need to be enabled, since only its viewer is used.
  */
 
 namespace APP\plugins\generic\documentPreview;
 
 use APP\core\Application;
 use APP\template\TemplateManager;
+use PKP\core\Core;
+use PKP\facades\Locale;
 use PKP\plugins\GenericPlugin;
 use PKP\plugins\Hook;
 
 class DocumentPreviewPlugin extends GenericPlugin
 {
+    /** The viewer page of the PDF.js PDF Viewer plugin, relative to the OJS folder */
+    public const PDFJS_VIEWER = 'plugins/generic/pdfJsViewer/pdf.js/web/viewer.html';
+
     public function getName()
     {
         return 'DocumentPreviewPlugin';
@@ -39,7 +48,19 @@ class DocumentPreviewPlugin extends GenericPlugin
 
     public function getDescription()
     {
-        return __('plugins.generic.documentPreview.description');
+        $description = __('plugins.generic.documentPreview.description');
+        if (!$this->hasPdfJsViewer()) {
+            $description .= ' ' . __('plugins.generic.documentPreview.pdfJsViewerMissing');
+        }
+        return $description;
+    }
+
+    /**
+     * Whether the PDF.js PDF Viewer plugin, whose viewer shows PDF files, is installed.
+     */
+    public function hasPdfJsViewer(): bool
+    {
+        return is_file(Core::getBaseDir() . '/' . self::PDFJS_VIEWER);
     }
 
     public function register($category, $path, $mainContextId = null)
@@ -58,10 +79,11 @@ class DocumentPreviewPlugin extends GenericPlugin
      *   'extensions' file name extensions it reads (lower case, without the dot)
      *   'mimeTypes'  media types it reads (for files whose name has no extension)
      *   'options'    passed to the renderer's render function, e.g. URLs of libraries
+     *   'notice'     whether the dialog says that this is a simplified preview (default: true)
      *
      * @hook DocumentPreview::renderers [[&$renderers, $plugin]]
      */
-    public function getRenderers(string $baseUrl, string $version): array
+    public function getRenderers(string $baseUrl, string $version, string $ojsBaseUrl = ''): array
     {
         $renderers = [
             'docx' => [
@@ -80,7 +102,34 @@ class DocumentPreviewPlugin extends GenericPlugin
                     'application/vnd.oasis.opendocument.text-flat-xml',
                 ],
             ],
+            'image' => [
+                'script' => "{$baseUrl}/js/renderers/image.js?v={$version}",
+                'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif', 'bmp', 'svg'],
+                'mimeTypes' => [
+                    'image/png',
+                    'image/jpeg',
+                    'image/gif',
+                    'image/webp',
+                    'image/avif',
+                    'image/bmp',
+                    'image/x-ms-bmp',
+                    'image/svg+xml',
+                ],
+                'notice' => false,
+            ],
         ];
+        if ($this->hasPdfJsViewer()) {
+            $renderers['pdf'] = [
+                'script' => "{$baseUrl}/js/renderers/pdf.js?v={$version}",
+                'extensions' => ['pdf'],
+                'mimeTypes' => ['application/pdf', 'application/x-pdf'],
+                'options' => [
+                    'viewerUrl' => "{$ojsBaseUrl}/" . self::PDFJS_VIEWER,
+                    'locale' => str_replace('_', '-', Locale::getLocale()),
+                ],
+                'notice' => false,
+            ];
+        }
         Hook::call('DocumentPreview::renderers', [&$renderers, $this]);
         return $renderers;
     }
@@ -99,7 +148,7 @@ class DocumentPreviewPlugin extends GenericPlugin
         $templateMgr = $args[0]; /** @var TemplateManager $templateMgr */
         $base = $request->getBaseUrl() . '/' . $this->getPluginPath();
         $version = $this->getCurrentVersion()?->getVersionString() ?? '';
-        $renderers = $this->getRenderers($base, $version);
+        $renderers = $this->getRenderers($base, $version, $request->getBaseUrl());
 
         $config = [
             'renderers' => array_map(
@@ -107,6 +156,7 @@ class DocumentPreviewPlugin extends GenericPlugin
                     'extensions' => array_values(array_map('strtolower', $renderer['extensions'] ?? [])),
                     'mimeTypes' => array_values(array_map('strtolower', $renderer['mimeTypes'] ?? [])),
                     'options' => (object) ($renderer['options'] ?? []),
+                    'notice' => (bool) ($renderer['notice'] ?? true),
                 ],
                 $renderers
             ),

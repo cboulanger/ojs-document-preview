@@ -21,10 +21,19 @@
  * Renderers (see js/renderers/docx.js) register themselves:
  *
  *   window.documentPreview.register('docx', {
- *     // buffer: the file (ArrayBuffer); options: from the plugin's PHP configuration.
- *     // Returns (a promise of) the document's body as HTML.
- *     render: function (buffer, options) { ... }
+ *     // buffer: the file (ArrayBuffer); options: from the plugin's PHP configuration;
+ *     // file: {name, url}. Returns (a promise of) the document's body as HTML.
+ *     render: function (buffer, options, file) { ... }
  *   });
+ *
+ * or, for formats with a viewer of their own (js/renderers/pdf.js), with
+ *
+ *     // Returns the URL of a page (on the same server) that shows the file at url
+ *     page: function (url, options, file) { ... }
+ *
+ * instead of render. The core doesn't load the file then: the page does. The page
+ * runs with scripts and the page's origin, so it must be trusted code, and it can't
+ * navigate the OJS page.
  *
  * and can use documentPreview.loadScript(url) to load libraries on first use and
  * documentPreview.unsupported() for files they can't read. The formats a renderer
@@ -57,7 +66,7 @@
 
 	window.documentPreview = {
 		register: function (id, renderer) {
-			if (!config.renderers[id] || typeof renderer.render !== 'function') {
+			if (!config.renderers[id] || (typeof renderer.render !== 'function' && typeof renderer.page !== 'function')) {
 				return;
 			}
 			renderers[id] = renderer;
@@ -349,6 +358,9 @@
 
 	function openPreview(link, url, rendererId) {
 		var name = fileName(link) || text.file;
+		var renderer = renderers[rendererId];
+		var rendererConfig = config.renderers[rendererId];
+		var file = {name: name, url: url};
 		var dialog = element('dialog', 'documentPreview');
 		dialog.setAttribute('aria-label', label(link));
 
@@ -368,12 +380,23 @@
 		status.setAttribute('role', 'status');
 
 		var frame = element('iframe', 'documentPreview__frame');
-		frame.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox');
+		if (renderer.page) {
+			// A viewer page from this server (trusted code): scripts and its own origin,
+			// so it can load the file, but no navigating the OJS page
+			frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-modals ' +
+				'allow-downloads allow-popups allow-popups-to-escape-sandbox');
+			frame.setAttribute('allow', 'fullscreen');
+		} else {
+			// The converted document: no scripts, no access to the page
+			frame.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox');
+		}
 		frame.title = label(link);
 		frame.hidden = true;
 
 		dialog.appendChild(header);
-		dialog.appendChild(element('p', 'documentPreview__notice', text.notice));
+		if (rendererConfig.notice) {
+			dialog.appendChild(element('p', 'documentPreview__notice', text.notice));
+		}
 		dialog.appendChild(status);
 		dialog.appendChild(frame);
 
@@ -402,10 +425,20 @@
 		dialog.showModal();
 		close.focus();
 
-		fetchFile(url).then(function (buffer) {
-			return renderers[rendererId].render(buffer, config.renderers[rendererId].options);
-		}).then(function (html) {
-			frame.srcdoc = documentHtml(prepareLinks(String(html)));
+		var shown;
+		if (renderer.page) {
+			// The page shows its own progress and errors
+			shown = Promise.resolve(renderer.page(url, rendererConfig.options, file)).then(function (pageUrl) {
+				frame.src = pageUrl;
+			});
+		} else {
+			shown = fetchFile(url).then(function (buffer) {
+				return renderer.render(buffer, rendererConfig.options, file);
+			}).then(function (html) {
+				frame.srcdoc = documentHtml(prepareLinks(String(html)));
+			});
+		}
+		shown.then(function () {
 			frame.hidden = false;
 			status.hidden = true;
 		}).catch(function (error) {

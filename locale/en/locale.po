@@ -10,7 +10,7 @@ msgid "plugins.generic.documentPreview.displayName"
 msgstr "Document Preview"
 
 msgid "plugins.generic.documentPreview.description"
-msgstr "Adds a preview of submitted documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser. Formats: DOCX (with mammoth.js) and OpenDocument text (ODT)."
+msgstr "Adds a preview of submitted documents to the editorial workflow, so that they can be read without downloading them. The conversion happens in the browser. Formats: DOCX (with mammoth.js), OpenDocument text (ODT), PDF (with the viewer of the PDF.js PDF Viewer plugin) and images (PNG, JPEG, GIF, WebP, AVIF, BMP, SVG)."
 
 msgid "plugins.generic.documentPreview.preview"
 msgstr "Preview"
@@ -32,3 +32,6 @@ msgstr "file"
 
 msgid "plugins.generic.documentPreview.notice"
 msgstr "Simplified preview: layout, page breaks, headers, footers and comments are not shown."
+
+msgid "plugins.generic.documentPreview.pdfJsViewerMissing"
+msgstr "The PDF preview needs the plugin \"PDF.js PDF Viewer\" (part of OJS), which is not installed."

@@ -10,7 +10,7 @@ msgid "plugins.generic.documentPreview.displayName"
 msgstr "Dokumentvorschau"
 
 msgid "plugins.generic.documentPreview.description"
-msgstr "Ergänzt den redaktionellen Workflow um eine Vorschau eingereichter Dokumente, sodass sie ohne Herunterladen gelesen werden können. Die Umwandlung erfolgt im Browser. Formate: DOCX (mit mammoth.js) und OpenDocument-Text (ODT)."
+msgstr "Ergänzt den redaktionellen Workflow um eine Vorschau eingereichter Dokumente, sodass sie ohne Herunterladen gelesen werden können. Die Umwandlung erfolgt im Browser. Formate: DOCX (mit mammoth.js), OpenDocument-Text (ODT), PDF (mit dem Viewer des Plugins „PDF.js PDF Viewer“) und Bilder (PNG, JPEG, GIF, WebP, AVIF, BMP, SVG)."
 
 msgid "plugins.generic.documentPreview.preview"
 msgstr "Vorschau"
@@ -32,3 +32,6 @@ msgstr "Datei"
 
 msgid "plugins.generic.documentPreview.notice"
 msgstr "Vereinfachte Vorschau: Seitenlayout, Seitenumbrüche, Kopf- und Fußzeilen sowie Kommentare werden nicht angezeigt."
+
+msgid "plugins.generic.documentPreview.pdfJsViewerMissing"
+msgstr "Die PDF-Vorschau benötigt das Plugin „PDF.js PDF Viewer“ (Teil von OJS), das nicht installiert ist."
